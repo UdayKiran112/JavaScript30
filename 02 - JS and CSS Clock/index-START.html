@@ -63,13 +63,53 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
     }
 
   </style>
 
   <script>
+    const secondHand  = document.querySelector('.second-hand');
+    const minuteHand = document.querySelector('.min-hand');
+    const hourHand = document.querySelector('.hour-hand');
 
+    // This function sets the time on the clock hands using the current time.
+    // It updates the rotation of each clock hand based on the seconds, minutes, and hours of the current time.
+    // 
+    // The function does the following steps:
+    // 1. It gets the current date and time using the new Date() function.
+    // 2. It extracts the seconds, minutes, and hours from the current time using the getSeconds(), getMinutes(), and getHours() methods of the Date object.
+    // 3. It calculates the rotation degrees for each hand based on the current time.
+    //    - The rotation degrees for the second hand is calculated by dividing the seconds by 60 (to get the fraction of a full circle) and multiplying that by 360 (to convert to degrees).
+    //      It then adds 90 degrees to account for the rotation of the hands being from the 12 o'clock position.
+    //    - The rotation degrees for the minute hand is calculated by dividing the minutes by 60, multiplying by 360, adding the fraction of a full circle (calculated from the seconds) times 6, and adding 90 degrees.
+    //    - The rotation degrees for the hour hand is calculated by dividing the hours by 12, multiplying by 360, adding the fraction of a full circle (calculated from the minutes) times 30, and adding 90 degrees.
+    // 4. It sets the CSS transform property of each hand element to rotate it to the calculated degrees.
+    function setDate(){
+      // Get the current date and time
+      const now = new Date();
 
+      // Extract the seconds, minutes, and hours from the current time
+      const seconds = now.getSeconds();  // Get the seconds (0-59)
+      const minutes = now.getMinutes();  // Get the minutes (0-59)
+      const hour = now.getHours();       // Get the hours (0-23)
+
+      // Calculate the rotation degrees for each hand
+      const secondsDegrees = (seconds/60)*360+90;   // Calculate the rotation degrees for the second hand
+      const minutesDegrees = (minutes/60)*360+((seconds/60)*6)+90;  // Calculate the rotation degrees for the minute hand
+      const hourDegrees = (hour/12)*360+((minutes/60)*30)+90;        // Calculate the rotation degrees for the hour hand
+
+      // Set the CSS transform property of each hand element to rotate it to the calculated degrees
+      secondHand.style.transform = `rotate(${secondsDegrees}deg)`;  // Set the rotation for the second hand
+      minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;  // Set the rotation for the minute hand
+      hourHand.style.transform = `rotate(${hourDegrees}deg)`;       // Set the rotation for the hour hand
+    }
+
+    // Call the setDate function every second
+    setInterval(setDate, 1000);
   </script>
 </body>
 </html>
